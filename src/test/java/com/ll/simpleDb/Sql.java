@@ -1,45 +1,48 @@
 package com.ll.simpleDb;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Sql {
-
-    public Sql appendIn(String str, List ids){
-        System.out.println("not yet");
-        return new Sql();
+    private String query = "";
+    public Sql appendIn(String query, List ids){
+        ArrayList<Object> list = (ArrayList<Object>) ids;
+        String range = "(`"+list.get(0)+"`";
+        for (int i = 1; i < list.size(); i++) {
+            range += ",`"+list.get(i)+"`";
+        }
+        range += ")";
+        System.out.println(query);
+        return this;
     }
 
     public Sql append(String str) {
         System.out.println("not yet");
-        return new Sql();
+        return this;
     }
 
     public Sql append(String title, String str) {
         System.out.println("not yet");
-        return new Sql();
+        return this;
     }
 
     public Sql append(String str, int a) {
         System.out.println("not yet");
-        return new Sql();
+        return this;
     }
 
     public Sql append(String str, int a, int b) {
         System.out.println("not yet");
-        return new Sql();
+        return this;
     }
     public Sql append(String str, int a, int b, int c) {
         System.out.println("not yet");
-        return new Sql();
+        return this;
     }
 
     public Sql append(String str, int a, int b, int c, int d) {
         System.out.println("not yet");
-        return new Sql();
+        return this;
     }
 
     public long insert() {

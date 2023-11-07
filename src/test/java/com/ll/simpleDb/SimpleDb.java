@@ -22,11 +22,15 @@ public class SimpleDb {
     }
 
     public void run(String query){
-        System.out.println("not yet");
+        System.out.println(query);
     }
 
     public void run(String query, String title, String body, boolean isBlind){
-        System.out.println("not yet");
+        query = query
+                .replace(" = ?"," = "+title)
+                .replace(" = ?"," = "+body)
+                .replace(" = ?"," = "+isBlind);
+        System.out.println(query);
     }
 
     public Sql genSql() {
