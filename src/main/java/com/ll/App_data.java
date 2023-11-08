@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -20,26 +19,8 @@ public class App_data {
     private HashMap<Integer, Quote> data = new HashMap<>();
 
     public String selectList() {
-        StringBuilder sb = new StringBuilder();
-        Integer[] keys = data.keySet().toArray(Integer[]::new);
-        Arrays.sort(keys);
-        sb.append("번호 / 작가 / 명언").append("\n")
-                .append("----------------------").append("\n");
-//        for (int i = 0; i < keys.length; i++) {
-//            int quote_id = keys[i];
-//            Data_table data_table = data.get(quote_id);
-//            String author = data_table.getAuthor();
-//            String content = data_table.getContent();
-//            String localDateTime = data_table.getLocalDateTime();
-//            sb.append(quote_id).append(" / ")
-//                    .append(author).append(" / ")
-//                    .append(content).append(" / ")
-//                    .append(localDateTime).append("\n");
-//        }
-//        String result = sb.toString();
-
-
-        //stream으로 고치기  "1 / 작자미상 / 현재를 사랑하라."
+        //entry : map의 key와 value를 모두 포함 / .map에서 항목별 String 생성 /
+        //Collectors.joining(요소 사이사이 들어갈 문자열, 결과의 시작부분에 합쳐질 문자열, 결과의 끝부분에 합쳐질 문자열)
         String result = data.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
                 .map(entry -> {
@@ -48,6 +29,7 @@ public class App_data {
                             quote.getAuthor(), quote.getContent(), quote.getLocalDateTime());
                 })
                 .collect(Collectors.joining("\n", "번호 / 작가 / 명언\n----------------------\n", ""));
+
         return result;
     }
 
