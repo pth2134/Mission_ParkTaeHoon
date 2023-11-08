@@ -9,13 +9,27 @@ public class Command {
     Scanner sc = new Scanner(System.in);
     StringTokenizer st;
     App_data data = new App_data();
-    int last_id = 1;
+    int next_id = 1;
 
     private final String WRONG_INPUT = "올바르지 못한 명령입니다.";
     private final String NOT_FILE = "파일을 읽을 수 없습니다. data.json을 생성합니다.";
 
     Command() {
+        beforeAll();
+    }
+
+    Command(Scanner scanner) { //테스트용
+        beforeAll();
+        this.sc = scanner;
+    }
+
+    public void beforeAll(){
         loadCheck();
+        next_id = findLastId();
+        System.out.println("== 명언 앱 ==");
+    }
+
+    public void run(){
         read_command();
     }
 
@@ -67,9 +81,9 @@ public class Command {
     private void addQuote() {
         String content = readContent();
         String author = readAuthor();
-        data.getData().put(last_id, createQuote(author, content, LocalDateTime.now()));
-        System.out.println(last_id + "번 명언이 등록되었습니다.");
-        last_id++;
+        data.getData().put(next_id, createQuote(author, content, LocalDateTime.now()));
+        System.out.println(next_id + "번 명언이 등록되었습니다.");
+        next_id++;
     }
 
     private void deleteByQuoteId(int quoteId) {
@@ -119,6 +133,14 @@ public class Command {
         } catch (NullPointerException npe) {
             System.out.println(NOT_FILE);
         }
+    }
+
+    private int findLastId(){
+        int max = data.getData().keySet()
+                .stream()
+                .mapToInt(x->x)
+                .max().orElse(0); //keySet에 key가 있다면 가장 큰 값을, 없으면 0을 반환
+        return max+1; //lastId는 명언을 등록할 때 붙이는 Id여서 실제 마지막Id에 1을 더해야한다.
     }
 
 }

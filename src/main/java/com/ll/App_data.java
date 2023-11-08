@@ -35,6 +35,8 @@ public class App_data {
 //                    .append(localDateTime).append("\n");
 //        }
         //stream으로 고치기
+
+        //"1 / 작자미상 / 현재를 사랑하라."
         return sb;
     }
 
