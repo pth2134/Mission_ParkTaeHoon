@@ -86,9 +86,9 @@ public class Command {
 
     private void updateByQuoteId(int quoteId) {
         if (data.getData().containsKey(quoteId)) {
-            Data_table data_table = data.selectById(quoteId);
-            String author = data_table.getAuthor();
-            String content = data_table.getContent();
+            Quote quote = data.selectById(quoteId);
+            String author = quote.getAuthor();
+            String content = quote.getContent();
 
             System.out.println("명언(기존) : " + content);
             content = readContent();
@@ -102,8 +102,8 @@ public class Command {
         }
     }
 
-    private Data_table createTable(String author, String content, LocalDateTime localDateTime) {
-        Data_table table = new Data_table();
+    private Quote createTable(String author, String content, LocalDateTime localDateTime) {
+        Quote table = new Quote();
         table.setContent(content);
         table.setAuthor(author);
         table.setLocalDateTime(LocalDateTime.now().format(

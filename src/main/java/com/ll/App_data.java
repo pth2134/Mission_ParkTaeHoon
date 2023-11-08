@@ -9,15 +9,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.HashMap;
 
 @Getter
 @Setter
 public class App_data {
-    private HashMap<Integer, Data_table> data = new HashMap<>();
+    private HashMap<Integer, Quote> data = new HashMap<>();
 
     public StringBuilder selectList() {
         StringBuilder sb = new StringBuilder();
@@ -25,17 +23,18 @@ public class App_data {
         Arrays.sort(keys);
         sb.append("번호 / 작가 / 명언").append("\n")
                 .append("----------------------").append("\n");
-        for (int i = 0; i < keys.length; i++) {
-            int quote_id = keys[i];
-            Data_table data_table = data.get(quote_id);
-            String author = data_table.getAuthor();
-            String content = data_table.getContent();
-            String localDateTime = data_table.getLocalDateTime();
-            sb.append(quote_id).append(" / ")
-                    .append(author).append(" / ")
-                    .append(content).append(" / ")
-                    .append(localDateTime).append("\n");
-        }
+//        for (int i = 0; i < keys.length; i++) {
+//            int quote_id = keys[i];
+//            Data_table data_table = data.get(quote_id);
+//            String author = data_table.getAuthor();
+//            String content = data_table.getContent();
+//            String localDateTime = data_table.getLocalDateTime();
+//            sb.append(quote_id).append(" / ")
+//                    .append(author).append(" / ")
+//                    .append(content).append(" / ")
+//                    .append(localDateTime).append("\n");
+//        }
+        //stream으로 고치기
         return sb;
     }
 
@@ -46,12 +45,12 @@ public class App_data {
         return true;
     }
 
-    public Data_table selectById(int quoteId) {
+    public Quote selectById(int quoteId) {
         return data.get(quoteId);
     }
 
-    public void updateByQuoteId(int quoteId, Data_table data_table) {
-        data.replace(quoteId, data_table);
+    public void updateByQuoteId(int quoteId, Quote quote) {
+        data.replace(quoteId, quote);
     }
 
     public boolean save() {
@@ -68,7 +67,7 @@ public class App_data {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             String json = Files.readString(Path.of("data.json"));
-            TypeReference<HashMap<Integer, Data_table>> typeReference = new TypeReference<>() {
+            TypeReference<HashMap<Integer, Quote>> typeReference = new TypeReference<>() {
             };
             data = objectMapper.readValue(json, typeReference);
         } catch (IOException ioe) {
