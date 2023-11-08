@@ -11,13 +11,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
 public class App_data {
     private HashMap<Integer, Quote> data = new HashMap<>();
 
-    public StringBuilder selectList() {
+    public String selectList() {
         StringBuilder sb = new StringBuilder();
         Integer[] keys = data.keySet().toArray(Integer[]::new);
         Arrays.sort(keys);
@@ -34,10 +36,19 @@ public class App_data {
 //                    .append(content).append(" / ")
 //                    .append(localDateTime).append("\n");
 //        }
-        //stream으로 고치기
+//        String result = sb.toString();
 
-        //"1 / 작자미상 / 현재를 사랑하라."
-        return sb;
+
+        //stream으로 고치기  "1 / 작자미상 / 현재를 사랑하라."
+        String result = data.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(entry -> {
+                    Quote quote = entry.getValue();
+                    return String.format("%d / %s / %s / %s", entry.getKey(),
+                            quote.getAuthor(), quote.getContent(), quote.getLocalDateTime());
+                })
+                .collect(Collectors.joining("\n", "번호 / 작가 / 명언\n----------------------\n", ""));
+        return result;
     }
 
     public boolean removeByQuoteId(int quoteId) {
