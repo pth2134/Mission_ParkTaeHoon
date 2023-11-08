@@ -67,7 +67,7 @@ public class Command {
     private void addQuote() {
         String content = readContent();
         String author = readAuthor();
-        data.getData().put(last_id, createTable(author, content, LocalDateTime.now()));
+        data.getData().put(last_id, createQuote(author, content, LocalDateTime.now()));
         System.out.println(last_id + "번 명언이 등록되었습니다.");
         last_id++;
     }
@@ -94,7 +94,7 @@ public class Command {
             content = readContent();
             System.out.println("작가(기존) : " + author);
             author = readAuthor();
-            data.updateByQuoteId(quoteId, createTable(author, content, LocalDateTime.now()));
+            data.updateByQuoteId(quoteId, createQuote(author, content, LocalDateTime.now()));
             System.out.println(quoteId + " / " + author + " / " + content + " / "
                     + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
         } else {
@@ -102,7 +102,7 @@ public class Command {
         }
     }
 
-    private Quote createTable(String author, String content, LocalDateTime localDateTime) {
+    private Quote createQuote(String author, String content, LocalDateTime localDateTime) {
         Quote table = new Quote();
         table.setContent(content);
         table.setAuthor(author);
