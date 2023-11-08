@@ -25,7 +25,7 @@ public class Command {
 
     public void beforeAll(){
         loadCheck();
-        next_id = findLastId();
+        next_id = findNextId();
         System.out.println("== 명언 앱 ==");
     }
 
@@ -108,9 +108,8 @@ public class Command {
             content = readContent();
             System.out.println("작가(기존) : " + author);
             author = readAuthor();
-            data.updateByQuoteId(quoteId, createQuote(author, content, LocalDateTime.now()));
-            System.out.println(quoteId + " / " + author + " / " + content + " / "
-                    + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm")));
+            Quote quote_modified = createQuote(author, content, LocalDateTime.now());
+            data.updateByQuoteId(quoteId, quote_modified);
         } else {
             System.out.println(quoteId + "번 명언은 존재하지 않습니다.");
         }
@@ -122,7 +121,6 @@ public class Command {
         table.setAuthor(author);
         table.setLocalDateTime(LocalDateTime.now().format(
                 DateTimeFormatter.ofPattern("yyyy-MM-dd.HH:mm"))); //String으로 변환 후 저장
-        //userid
         return table;
     }
 
@@ -135,12 +133,12 @@ public class Command {
         }
     }
 
-    private int findLastId(){
+    private int findNextId(){
         int max = data.getData().keySet()
                 .stream()
                 .mapToInt(x->x)
                 .max().orElse(0); //keySet에 key가 있다면 가장 큰 값을, 없으면 0을 반환
-        return max+1; //lastId는 명언을 등록할 때 붙이는 Id여서 실제 마지막Id에 1을 더해야한다.
+        return max+1; //next_id는 명언을 등록할 때 붙이는 Id여서 실제 마지막Id에 1을 더해야한다.
     }
 
 }

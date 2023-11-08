@@ -106,4 +106,98 @@ public class AppTest {
                 .contains("2 / 작자미상 / 과거에 집착하지 마라.");
 
     }
+
+    @Test
+    @DisplayName("삭제")
+    void t6() {
+
+        final String out = run("""
+                삭제?id=1
+                목록
+                종료
+                """);
+
+        assertThat(out)
+                .contains("1번 명언이 삭제되었습니다.")
+                .contains("2 / 작자미상 / 과거에 집착하지 마라.")
+                .doesNotContain("1 / 작자미상 / 현재를 사랑하라.");
+
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 명언에 대한 예외처리")
+    void t7() {
+
+        final String out = run("""
+                삭제?id=1
+                삭제?id=1
+                종료
+                """);
+
+        assertThat(out)
+                .contains("1번 명언은 존재하지 않습니다.");
+    }
+
+    //    명령) 수정?id=2
+//    명언(기존) : 과거에 집착하지 마라.
+//            명언 : 현재와 자신을 사랑하라.
+//            작가(기존) : 작자미상
+//    작가 : 홍길동
+//    명령) 목록
+//    번호 / 작가 / 명언
+//----------------------
+//        2 / 홍길동 / 현재와 자신을 사랑하라.
+    @Test
+    @DisplayName("수정")
+    void t8() {
+
+        final String out = run("""
+                수정?id=2
+                현재와 자신을 사랑하라.
+                홍길동
+                목록
+                종료
+                """);
+
+        assertThat(out)
+                .contains("1 / 작자미상 / 현재를 사랑하라.")
+                .contains("2 / 홍길동 / 현재와 자신을 사랑하라.")
+                .doesNotContain("2 / 작자미상 / 과거에 집착하지 마라.");
+    }
+
+    @Test
+    @DisplayName("파일을 통한 영속성")
+    void t9() {
+
+        run("""
+                수정?id=2
+                현재와 자신을 사랑하라.
+                홍길동
+                목록
+                빌드
+                종료
+                """);
+
+        final String out = run("""
+                목록
+                종료
+                """);
+
+        assertThat(out)
+                .contains("1 / 작자미상 / 현재를 사랑하라.")
+                .contains("2 / 홍길동 / 현재와 자신을 사랑하라.");
+
+        final String out2 = run("""
+                수정?id=2
+                과거에 집착하지 마라.
+                작자미상
+                목록
+                빌드
+                종료
+                """);
+
+        assertThat(out2)
+                .contains("1 / 작자미상 / 현재를 사랑하라.")
+                .contains("2 / 작자미상 / 과거에 집착하지 마라.");
+    }
 }
